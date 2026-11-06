@@ -51,4 +51,8 @@ n= 5000: rel. error of Sigma_hat = 0.0323, out-of-sample false-alarm rate = 0.01
 d=6 data with column 6 = column 1 + column 2: smallest eigenvalue of Sigma_hat = 1.52e-15
 inv_sqrt_psd raises: Matrix not positive definite (smallest eigenvalue 3.43e-15).
 
+--- Same check on the real keystroke data (one genuine user) ---
+subject s002, all 31 features: Matrix not positive definite (smallest eigenvalue -6.62e-18).
+subject s002, H + UD (21 features): Sigma_hat invertible; mean d^2 = 21.00 (= p by construction), in-sample rate of d^2 > chi2 threshold = 0.1500 (nominal 0.01)
+
 Wrote /home/claude/proj/docs/simulation_table.csv and .tex (21 rows)
