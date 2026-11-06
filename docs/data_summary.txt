@@ -1,0 +1,31 @@
+=== DATA DESCRIPTION: CMU Keystroke Dynamics Benchmark ===
+Rows: 20400   Columns: 34
+Subjects: 51   Sessions per subject: 8   Reps per session: 50
+Rows per subject: min=400, max=400
+
+Variable types:
+  subject (string ID), sessionIndex (int), rep (int)
+  31 timing features (float, seconds): 11 hold (H), 10 down-down (DD), 10 up-down (UD)
+
+Missing values (total): 0
+Non-positive timing entries: 22118
+Negative UD (key-up to next key-down) entries: 22118
+  -> log is defined for H and DD (all > 0) but NOT for UD (can be negative).
+
+Pooled summary of selected features:
+               mean     std     min      max     skew
+H.period     0.0934  0.0296  0.0014   0.3761   1.2734
+H.Return     0.0883  0.0275  0.0029   0.2651   0.7271
+DD.period.t  0.2641  0.2205  0.0187  12.5061  12.1059
+UD.period.t  0.1708  0.2268 -0.2358  12.4517  11.3527
+Median skewness, hold times:        0.90
+Median skewness, log hold times:    -0.50
+
+Linear dependence check  DD(a,b) = H(a) + UD(a,b):
+  max |DD - H - UD| over all rows and all 10 key pairs = 8.88e-16
+
+Covariance of subject s002 (n=400, p=31), all 31 features:
+  rank = 21  (full rank would be 31)
+  eigenvalues below 1e-12: 10  -> S is singular, S^-1 does not exist
+After dropping the DD columns (21 features left, H + UD):
+  rank = 21, smallest eigenvalue = 7.957e-05, condition number = 8.605e+02

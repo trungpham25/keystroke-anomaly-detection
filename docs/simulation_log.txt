@@ -1,0 +1,54 @@
+Seed=0  d=5  n=5000  alpha=0.01  attack shift=4.0 per coord
+True mu = [0. 0. 0. 0. 0.]
+True Sigma =
+[[ 5.741  1.084 -0.928 -0.738 -1.07 ]
+ [ 1.084  9.825 -0.643 -2.883 -0.285]
+ [-0.928 -0.643 12.396 -0.22   0.481]
+ [-0.738 -2.883 -0.22   7.189  0.647]
+ [-1.07  -0.285  0.481  0.647  8.266]]
+Eigenvalues of true Sigma: [ 5.112  5.243  8.368 11.615 13.079] (all > 0, so Sigma is positive definite)
+
+--- Q1: MLEs ---
+mu_hat = [ 0.0529  0.0013  0.0228  0.0089 -0.015 ]
+max |mu_hat - mu|         = 0.0529
+max |Sigma_hat - Sigma|   = 0.2034
+relative Frobenius error  = 0.0290
+agrees with np.cov(bias=True): True
+
+--- Q2: Mahalanobis distance ---
+min d^2 = 0.060053  (>= 0: True)
+
+--- Q3: d^2 ~ chi^2_d ---
+mean d^2 = 5.0000  (chi^2_5 mean = 5)
+var  d^2 = 10.2016  (chi^2_5 var  = 10)
+KS test vs chi^2_5: statistic = 0.0120, p = 0.466
+
+--- Q4: whitening ---
+max |cov(Z) - I|         = 2.11e-15
+max |mean(Z)|            = 3.59e-17
+Sigma_hat^-1/2 symmetric = True
+(S^-1/2)^2 S = I         = True
+
+--- Q5: threshold and false-alarm rate ---
+tau = chi2.ppf(1 - 0.01, 5) = 15.0863
+false-alarm rate = 0.0102  (target 0.01; binomial s.e. = 0.0014)
+detection rate on 50 shifted attacks = 0.540
+
+--- Heavy-tailed data (multivariate t, 3 d.f., same mean/covariance) ---
+false-alarm rate = 0.0570  (target 0.01) -> 5.7x too high
+KS test vs chi^2_5: statistic = 0.3469, p = 0.00e+00
+max |cov(Z) - I| = 1.22e-15 (whitening still works: it only uses the first two moments)
+over 200 replications: Gaussian false-alarm rate = 0.0100 +/- 0.0012; t(3) false-alarm rate = 0.0526 +/- 0.0042
+
+--- Effect of sample size n (Gaussian data, 200 replications each) ---
+n=   50: rel. error of Sigma_hat = 0.3156, out-of-sample false-alarm rate = 0.0342
+n=  100: rel. error of Sigma_hat = 0.2286, out-of-sample false-alarm rate = 0.0183
+n=  400: rel. error of Sigma_hat = 0.1143, out-of-sample false-alarm rate = 0.0123
+n= 1000: rel. error of Sigma_hat = 0.0712, out-of-sample false-alarm rate = 0.0105
+n= 5000: rel. error of Sigma_hat = 0.0323, out-of-sample false-alarm rate = 0.0102
+
+--- What happens when Sigma_hat is singular (cf. raw keystroke data) ---
+d=6 data with column 6 = column 1 + column 2: smallest eigenvalue of Sigma_hat = 1.52e-15
+inv_sqrt_psd raises: Matrix not positive definite (smallest eigenvalue 3.43e-15).
+
+Wrote /home/claude/proj/docs/simulation_table.csv and .tex (21 rows)
