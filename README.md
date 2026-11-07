@@ -20,7 +20,7 @@ Mahalanobis distance d² = (x − μ)ᵀ Σ⁻¹ (x − μ) is larger than a χ�
 ```bash
 git clone https://github.com/trungpham25/keystroke-anomaly-detection.git
 cd keystroke-anomaly-detection
-pip install numpy pandas matplotlib scipy
+pip install -r requirements.txt
 python src/download_data.py
 ```
 
@@ -37,8 +37,10 @@ All commands are run from the repository root.
 
 | Command | What it does |
 |---|---|
-| `python src/load_data.py` | Describes the real data (size, types, missing values, the UD = DD − H dependency) and saves two plots to `figures/` |
-| `python src/simulation.py` | Simulation with known truth (d = 5, seed 0). Compares true values with estimates, checks the χ² false-alarm rate, then repeats with heavy-tailed t(3) data. Saves `figures/simulation_d2_vs_chi2.png` |
+| `python src/run_all.py` | Runs the three steps below in order |
+| `python src/download_data.py` | Downloads the dataset into `data/` if it is missing |
+| `python src/load_data.py` | Describes the real data (size, types, missing values, the UD = DD − H dependency). Saves 3 plots to `figures/` and a summary to `docs/data_summary.txt` |
+| `python src/simulation.py` | Simulation with known truth (p = 5, seed 0): true values against estimates, the χ² false-alarm rate, heavy-tailed t(3) data and the effect of sample size. Saves 3 plots to `figures/`, and a log and results table to `docs/` |
 
 Following the course rules, the code imports only `numpy`, `pandas`, `matplotlib` and
 `scipy.stats`. Library routines are used only to check our own results.
