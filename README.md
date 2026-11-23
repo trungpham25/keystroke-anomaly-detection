@@ -10,7 +10,7 @@ Mahalanobis distance d² = (x − μ)ᵀ Σ⁻¹ (x − μ) is larger than a χ�
 
 | Folder | Contents |
 |---|---|
-| `src/` | Python code: data download, data loading and description, simulation check |
+| `src/` | Python code: the from-scratch method (`methods.py`), simulation, data loading and the check scripts |
 | `data/` | The raw dataset (kept out of Git; see Setup) |
 | `figures/` | Plots produced by the scripts and used in the report |
 | `docs/` | Overleaf report PDF, project plan (Excel) and iteration write-ups |
@@ -35,6 +35,20 @@ curl -o data/DSL-StrongPasswordData.csv https://www.cs.cmu.edu/~keystroke/DSL-St
 
 All commands are run from the repository root.
 
+### From-scratch implementation and verification
+
+`src/methods.py` holds the method itself: one function per algorithm step (MLE, Cholesky,
+triangular solves, Mahalanobis distance, χ² threshold, flags and rates), using NumPy only.
+`src/simulate.py` generates the simulated data with the same model and seed as before.
+
+| Command | What it does |
+|---|---|
+| `python src/small_example.py` | The tiny example step by step: 4 points in R², exact fractions, Gauss-Jordan inverse, Mahalanobis distance, and a second check with Cholesky. Log in `docs/small_example_log.txt` |
+| `python src/check_simulation.py` | The simulation test: estimates against the true μ and Σ for n = 50 to 5000, comparison with NumPy and SciPy, and two stress tests (heavy tails, a copied feature). Log in `docs/check_simulation_log.txt`, plots `figures/it3_sim_*.png` |
+| `python src/run_real.py` | The real data: subject s002 trained on repetitions 1-200 and tested on 201-400, the other subjects as impostors, α = 0.01 and 0.05, with and without log hold times; library comparison, normality and condition-number checks. Log in `docs/run_real_log.txt`, plots `figures/it3_real_*.png` |
+
+### Data description and first simulation
+
 | Command | What it does |
 |---|---|
 | `python src/run_all.py` | Runs the three steps below in order |
@@ -42,8 +56,8 @@ All commands are run from the repository root.
 | `python src/load_data.py` | Describes the real data (size, types, missing values, the UD = DD − H dependency). Saves 3 plots to `figures/` and a summary to `docs/data_summary.txt` |
 | `python src/simulation.py` | Simulation with known truth (p = 5, seed 0): true values against estimates, the χ² false-alarm rate, heavy-tailed t(3) data and the effect of sample size. Saves 3 plots to `figures/`, and a log and results table to `docs/` |
 
-Following the course rules, the code imports only `numpy`, `pandas`, `matplotlib` and
-`scipy.stats`. Library routines are used only to check our own results.
+Following the course rules, the method uses NumPy only. `numpy.linalg` and `scipy.stats`
+are used only to check our own results.
 
 ## Data
 

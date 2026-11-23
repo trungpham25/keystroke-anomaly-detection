@@ -1,0 +1,54 @@
+X (4 x 2) =
+   [     0       0]
+   [     2       1]
+   [     2       3]
+   [     4       4]
+new point x =
+   [     4       3]
+
+Step 1: mu_hat = (1/n) X^T 1
+X^T 1 =
+   [     8       8]
+mu_hat =
+   [     2       2]
+
+Step 2: X_c = X - 1 mu_hat^T
+X_c =
+   [    -2      -2]
+   [     0      -1]
+   [     0       1]
+   [     2       2]
+
+Step 3: Sigma_hat = (1/n) X_c^T X_c
+X_c^T X_c =
+   [     8       8]
+   [     8      10]
+Sigma_hat =
+   [     2       2]
+   [     2     5/2]
+det(Sigma_hat) = 1  (> 0 and Sigma_11 > 0, so Sigma_hat is positive definite)
+
+Inverse by Gauss-Jordan on [Sigma_hat | I] (exact fractions):
+Sigma_hat^{-1} =
+   [   5/2      -2]
+   [    -2       2]
+
+Mahalanobis distance of the new point:
+x - mu_hat =
+   [     2       1]
+Sigma_hat^{-1} (x - mu_hat) =
+   [     3      -2]
+d^2 = (x - mu_hat)^T Sigma_hat^{-1} (x - mu_hat) = 4
+
+--- Second-way checks ---
+Sigma_hat Sigma_hat^{-1}  (must be I exactly) =
+   [     1       0]
+   [     0       1]
+
+Cholesky route (floating point), steps 4-6 of the algorithm:
+L = [[1.414214, 0], [1.414214, 0.707107]]   (L_11 = sqrt(2), L_21 = 2/sqrt(2) = sqrt(2), L_22 = sqrt(5/2 - 2) = sqrt(1/2))
+z = L^-1 (x - mu_hat) = [1.414214, -1.414214],  z^T z = 4.000000000000
+
+Threshold for p = 2 (closed form F_2^{-1}(1 - alpha) = -2 log alpha):
+   tau = 5.9915; d^2 = 4.0 > tau ? False  -> not an anomaly
+   tau = 9.2103; d^2 = 4.0 > tau ? False  -> not an anomaly

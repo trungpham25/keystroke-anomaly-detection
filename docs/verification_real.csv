@@ -1,0 +1,15 @@
+data,quantity,compared_with,abs_err,rel_err,ok
+Real data (raw),[raw] Sigma_hat vs np.cov(bias=True),np.cov,1.3877787807814457e-17,1.9400322139747903e-16,PASS
+Real data (raw),[raw] Cholesky L vs np.linalg.cholesky,np.linalg.cholesky,1.3877787807814457e-17,1.0218950593518137e-16,PASS
+Real data (raw),[raw] d^2 vs numpy.linalg.inv,np.linalg.inv,8.731149137020111e-11,6.152921805723202e-16,PASS
+Real data (raw),[raw] Gauss-Jordan inverse vs np.inv,np.linalg.inv,1.978150976356119e-11,1.17728984885133e-15,PASS
+Real data (raw),[raw] Cholesky inverse vs np.inv,np.linalg.inv,1.750777300912887e-11,8.268488229787592e-16,PASS
+Real data (raw),[raw] condition number vs np.linalg.cond,np.linalg.cond,3.0468072509393096e-11,1.901721365629213e-14,PASS
+Real data (log H),[log H] Sigma_hat vs np.cov(bias=True),np.cov,1.3877787807814457e-17,2.547558920184896e-16,PASS
+Real data (log H),[log H] Cholesky L vs np.linalg.cholesky,np.linalg.cholesky,2.7755575615628914e-17,7.274681762645003e-17,PASS
+Real data (log H),[log H] d^2 vs numpy.linalg.inv,np.linalg.inv,8.731149137020111e-11,6.230093065963197e-16,PASS
+Real data (log H),[log H] Gauss-Jordan inverse vs np.inv,np.linalg.inv,6.821210263296962e-13,5.120922112327552e-16,PASS
+Real data (log H),[log H] Cholesky inverse vs np.inv,np.linalg.inv,4.547473508864641e-13,3.609167781540602e-16,PASS
+Real data (log H),[log H] condition number vs np.linalg.cond,np.linalg.cond,8.526512829121202e-14,6.354460797868204e-16,PASS
+Real data,"tau (p=21, alpha=0.01) vs scipy",scipy.stats.chi2,1.4921397450962104e-12,3.832664971528764e-14,PASS
+Real data,"tau (p=21, alpha=0.05) vs scipy",scipy.stats.chi2,1.4495071809506044e-12,4.4367362819899186e-14,PASS

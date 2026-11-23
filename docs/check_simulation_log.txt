@@ -1,0 +1,36 @@
+=== 1. n = 5000, d = 5, seed 0, alpha = 0.01 ===
+-- against the truth --
+||mu_hat - mu||_2 = 0.0602;  max |mu_hat_j - mu_j| / SE = 1.56  (pass if < 3)
+||Sigma_hat - Sigma||_F / ||Sigma||_F = 0.0290;  max |Sigma_hat_jk - Sigma_jk| / SE = 1.99  (pass if < 3)
+false-alarm rate = 0.0102; target 0.01 +/- 3 SE = [0.0058, 0.0142]  PASS
+detection rate on the 50 Iteration 2 attacks (shift 4) = 0.540; theory (non-central chi^2, non-centrality 13.01) = 0.604; SE with 50 attacks = 0.069
+detection rate on 20000 new attacks = 0.6028 (theory 0.6036, SE 0.0035)
+KS test of d^2 against chi^2_5: statistic 0.0120, p-value 0.466
+-- against libraries (should be at rounding level) --
+
+=== 2. Error against the truth for several n ===
+    n  seed-0 max z(mu)  seed-0 max z(Sigma)  mean ||mu_hat-mu||  mean rel. err Sigma  lib max|d^2 diff|
+   50              1.91                 1.45              0.8866               0.3191            3.6e-15
+  100              1.69                 2.05              0.6538               0.2254            5.3e-15
+  500              2.52                 2.36              0.2803               0.0991            5.3e-15
+ 1000              1.78                 2.44              0.1945               0.0714            5.3e-15
+ 5000              1.56                 1.99              0.0890               0.0324            7.1e-15
+log-log slopes: mu error -0.505, Sigma error -0.497  (theory -0.5)
+out-of-sample false-alarm rate by n (fit on n points, test on 2000 new points): n=50: 0.0348, n=100: 0.0200, n=500: 0.0117, n=1000: 0.0107, n=5000: 0.0101
+
+=== 3. Stress test A: heavy tails (multivariate t, 3 d.f.) ===
+false-alarm rate = 0.0530 (target 0.01); over 200 runs 0.0529 +/- 0.0048
+KS p-value against chi^2_5: 0.0e+00
+
+=== 4. Stress test B: column 6 is an exact copy of column 1 ===
+my_cholesky stops: matrix is not positive definite: pivot 6 is -2.665e-15
+check: smallest eigenvalue of Sigma_hat (numpy.linalg.eigvalsh) = -3.55e-15; np.linalg.cond = 7.46e+15
+rank of Sigma_hat (numpy.linalg.matrix_rank) = 5 of 6
+
+=== 5. Assumption checks on the simulated data (should pass) ===
+A1 independence: lag-1 autocorrelation of each feature, max |r| = 0.0341  (3/sqrt(n) = 0.0424)
+A2 normality: max |skewness| = 0.042 (3 SE = 0.104); max |excess kurtosis| = 0.150 (3 SE = 0.208); KS p-value of d^2 = 0.466
+A3 positive definite: Cholesky succeeds; condition number = 2.596
+A4 enough data: n / p = 1000
+A5 stable over time: fit on the first half, false-alarm rate on the second half = 0.0112 (target 0.01)
+A6 anomalies differ: detection rate 0.540 against theory 0.604

@@ -1,0 +1,11 @@
+data,quantity,compared_with,abs_err,rel_err,ok
+Simulation (n=5000),mu_hat,true mu,0.0528597768410718,1.5599240081367725,PASS
+Simulation (n=5000),Sigma_hat,true Sigma,0.20344307170185374,1.9943981380239717,PASS
+Simulation (n=5000),mu_hat vs X.mean(axis=0),numpy mean,2.1510571102112408e-16,3.879323076279189e-15,PASS
+Simulation (n=5000),Sigma_hat vs np.cov(bias=True),np.cov,1.7763568394002505e-15,9.834634145375023e-17,PASS
+Simulation (n=5000),Cholesky L vs np.linalg.cholesky,np.linalg.cholesky,8.673617379884035e-19,1.3209202990347257e-19,PASS
+Simulation (n=5000),d^2 vs numpy.linalg.inv,np.linalg.inv,7.105427357601002e-15,1.6752074223811709e-16,PASS
+Simulation (n=5000),Gauss-Jordan inverse vs np.inv,np.linalg.inv,2.7755575615628914e-17,9.337522150508646e-17,PASS
+Simulation (n=5000),Cholesky inverse vs np.inv,np.linalg.inv,5.551115123125783e-17,2.0406925065277105e-16,PASS
+Simulation (n=5000),tau vs scipy chi2.ppf,scipy.stats.chi2,2.504663143554353e-13,1.660226638910622e-14,PASS
+Simulation (n=5000),condition number vs np.linalg.cond,np.linalg.cond,3.681499549657019e-13,1.4181085886557437e-13,PASS

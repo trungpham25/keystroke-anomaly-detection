@@ -1,0 +1,80 @@
+=== Cleaning steps ===
+rows 20400, columns 34, missing values 0
+duplicate (subject, session, rep) rows: 0; rows removed: 0
+features kept: 11 H + 10 UD = 21; dropped 10 DD columns (DD = H + UD exactly)
+smallest hold time 0.0014 s (> 0, so log H is defined); negative UD entries 22118 (log UD not defined)
+genuine s002: train 200 attempts, test 200 attempts; impostors 2500 attempts from 50 subjects
+
+=== Results for the genuine subject ===
+features  alpha      tau  false-alarm (test)  detection  false-alarm (train)
+raw        0.01   38.932               0.340      0.875                0.130
+raw        0.05   32.671               0.390      0.926                0.170
+log H      0.01   38.932               0.350      0.900                0.125
+log H      0.05   32.671               0.405      0.942                0.160
+
+=== Library comparisons (genuine subject) ===
+
+=== Q3: d^2 against chi^2_21 ===
+[raw] median d^2: training 14.3, test 22.5 (chi^2_21 median 20.3); 99th percentile: training 82.3, test 233.5 (chi^2_21: 38.9); KS p-value training 8.0e-25, test 4.5e-22
+[log H] median d^2: training 14.0, test 24.7 (chi^2_21 median 20.3); 99th percentile: training 76.6, test 173.3 (chi^2_21: 38.9); KS p-value training 8.3e-26, test 4.2e-25
+
+=== Q4: normality of each feature (genuine subject, training data) ===
+3 SE for n = 200: skewness 0.52, excess kurtosis 1.04
+feature             skew raw  kurt raw  skew log  kurt log
+H.period                0.15      1.36     -0.58      2.19
+H.t                     2.05     11.59      0.95      4.16
+H.i                     1.01      2.18      0.46      0.68
+H.e                     0.55      1.55      0.04      0.28
+H.five                  0.76      1.43      0.25      0.30
+H.Shift.r               0.65      1.86      0.06      1.08
+H.o                    -0.30      2.93     -2.20     11.81
+H.a                     0.56      0.36      0.15      0.03
+H.n                     1.05      1.64      0.36      1.25
+H.l                     0.90      1.30      0.48      0.39
+H.Return                0.32      1.59     -0.69      2.85
+UD.period.t             3.32     13.38      3.32     13.38   (not logged)
+UD.t.i                  1.66      3.97      1.66      3.97   (not logged)
+UD.i.e                  9.28    106.85      9.28    106.85   (not logged)
+UD.e.five               0.98      1.10      0.98      1.10   (not logged)
+UD.five.Shift.r         2.39      7.13      2.39      7.13   (not logged)
+UD.Shift.r.o            2.78      8.56      2.78      8.56   (not logged)
+UD.o.a                  2.71      9.38      2.71      9.38   (not logged)
+UD.a.n                  2.71     14.69      2.71     14.69   (not logged)
+UD.n.l                  4.83     27.90      4.83     27.90   (not logged)
+UD.l.Return             6.28     47.94      6.28     47.94   (not logged)
+features with |skewness| > 1 or |excess kurtosis| > 3: raw 12 of 21 (H.t, H.i, H.n, UD.period.t, UD.t.i, UD.i.e, UD.five.Shift.r, UD.Shift.r.o, UD.o.a, UD.a.n, UD.n.l, UD.l.Return); log H 11 of 21 (H.t, H.o, UD.period.t, UD.t.i, UD.i.e, UD.five.Shift.r, UD.Shift.r.o, UD.o.a, UD.a.n, UD.n.l, UD.l.Return)
+median |skewness| of the H features: raw 0.65, log 0.46; of the UD features: 2.75
+
+=== Q5: singular and nearly singular Sigma_hat ===
+all 31 features: my_cholesky stops: matrix is not positive definite: pivot 3 is 6.939e-18
+check: rank 21 of 31, np.linalg.cond = 9.6e+17
+[raw] 21 features: condition number 1602.1
+[log H] 21 features: condition number 134.2
+[log H] ridge Sigma_hat + eps I, eps = 0.001 x trace/p: condition number 131.0; alpha = 0.01: false-alarm 0.350, detection 0.899
+[log H] ridge Sigma_hat + eps I, eps = 0.01 x trace/p: condition number 108.3; alpha = 0.01: false-alarm 0.350, detection 0.890
+[log H] ridge Sigma_hat + eps I, eps = 0.1 x trace/p: condition number 40.0; alpha = 0.01: false-alarm 0.305, detection 0.821
+all 31 features with ridge eps = 1e-3 x trace/p: Cholesky succeeds, condition number 1.6e+04
+
+=== Assumption checks on the real data (genuine subject) ===
+-- raw features --
+A1 independence: lag-1 autocorrelation of d^2 over the 200 training attempts = 0.163; of the features: median 0.277, max 0.589  (3/sqrt(n) = 0.212)
+    mean d^2 in training sessions 1-4: 31.5, 16.1, 19.9, 16.5
+A2 normality: false-alarm rate on test 0.340 against alpha 0.01; on training 0.130; see Q3 and Q4
+A3 positive definite: Cholesky succeeds; condition number 1602.1
+A4 enough data: n = 200, p = 21, n/p = 9.5; false-alarm (alpha 0.01) when fitting on the first 50 / 100 / 200 attempts: 0.845 / 0.465 / 0.340
+A5 stable over time: false-alarm (alpha 0.01) in test sessions 5-8: 0.16, 0.06, 0.14, 1.00
+A6 impostors differ: detection (alpha 0.01) per impostor: min 0.34, median 0.98, max 1.00; 3 of 50 impostors detected less than half the time
+-- log H features --
+A1 independence: lag-1 autocorrelation of d^2 over the 200 training attempts = 0.177; of the features: median 0.244, max 0.589  (3/sqrt(n) = 0.212)
+    mean d^2 in training sessions 1-4: 31.0, 16.4, 20.1, 16.4
+A2 normality: false-alarm rate on test 0.350 against alpha 0.01; on training 0.125; see Q3 and Q4
+A3 positive definite: Cholesky succeeds; condition number 134.2
+A4 enough data: n = 200, p = 21, n/p = 9.5; false-alarm (alpha 0.01) when fitting on the first 50 / 100 / 200 attempts: 0.900 / 0.525 / 0.350
+A5 stable over time: false-alarm (alpha 0.01) in test sessions 5-8: 0.18, 0.08, 0.14, 1.00
+A6 impostors differ: detection (alpha 0.01) per impostor: min 0.42, median 1.00, max 1.00; 2 of 50 impostors detected less than half the time
+
+=== Same protocol with each of the 51 subjects as the genuine user ===
+raw    alpha 0.01: mean false-alarm 0.173 (median 0.150), mean detection 0.862 (median 0.881)
+raw    alpha 0.05: mean false-alarm 0.236 (median 0.215), mean detection 0.912 (median 0.936)
+log H  alpha 0.01: mean false-alarm 0.145 (median 0.130), mean detection 0.868 (median 0.912)
+log H  alpha 0.05: mean false-alarm 0.195 (median 0.180), mean detection 0.914 (median 0.954)
